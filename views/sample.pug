@@ -1,17 +1,25 @@
 html
 	head
 		title= title
+		link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
 	body
-		h1= `${name} 안녕하세요, PUG`
-		table
-			thead
-				tr
-					th 번호
-					th 이름
-					th 나이
-			tbody
-				each item in users
+		div.container
+			h1= `${name} 안녕하세요, PUG`
+			table.table.table-bordered#user-tbl
+				thead
 					tr
-						td= item.id
-						td= item.name
-						td= item.age
+						th 번호
+						th 이름
+						th 나이
+				tbody
+					each item in users
+						tr
+							td= item.id
+							td= item.name
+							td= item.age
+					- for(var i=0; i<users.length; i++) {
+						tr
+							td= users[i].id
+							td= users[i].name
+							td= users[i].age
+					- }
