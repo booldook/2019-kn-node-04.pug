@@ -3,6 +3,7 @@ $.ajax({
 	type: "get",
 	dataType: "json",
 	success: function(res) {
+		console.log(res);
 		html = '';
 		for(var i in res.result) {
 			html += '<tr>';
