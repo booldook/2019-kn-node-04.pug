@@ -1,0 +1,21 @@
+<script>
+	const users = [
+		{id: 1, name: "홍길동", age: 25},
+		{id: 2, name: "홍길순", age: 28},
+		{id: 3, name: "홍길만", age: 32},
+	];
+	const findUser = async (name) => {
+		let result = await users.filter(item => item.name == name);
+		return result; 
+	}
+	const findAge = async (id) => {
+		let result = await users.filter(item => item.id == id);
+		return result[0].age;
+	}
+	(async () => {
+		const result = await findUser("홍길동");
+		console.log(result);
+		const age = await findAge(result[0].id);
+		console.log(age);
+	})();
+</script>

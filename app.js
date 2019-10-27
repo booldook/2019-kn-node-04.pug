@@ -13,16 +13,16 @@ app.set("view engine", "pug");  // View Engine 지정
 app.set("views", "./views");  // View가 저장된 폴더 지정
 app.locals.pretty = true; // response 되는 소스를 이쁘게...
 
+const users = [
+  {id: 1, name: "홍길동", age: 25},
+  {id: 2, name: "홍길순", age: 28},
+  {id: 3, name: "홍길만", age: 32},
+];
 
 app.get(["/pug", "/pug/:type"], (req, res) => {
   let name = req.query.name;
   let titleChk = req.query.titleChk;
   let type = req.params.type;
-  const users = [
-    {id: 1, name: "홍길동", age: 25},
-    {id: 2, name: "홍길순", age: 28},
-    {id: 3, name: "홍길만", age: 32},
-  ];
   const vals = {name, title: "PUG연습", users, titleChk};
   switch(type) {
     case "include":
@@ -30,6 +30,20 @@ app.get(["/pug", "/pug/:type"], (req, res) => {
       break;
     default:
       res.render("block", vals);
+      break;
+  }
+});
+
+app.get(["/api", "/api/:type"], (req, res) => {
+  let type = req.params.type; // undefined
+  if(!type) type = "list";  
+  switch(type) {
+    case "list": 
+      res.json({
+        result : users
+      });
+      break;
+    default :
       break;
   }
 });
