@@ -17,15 +17,13 @@ const findAge = (id, cb) => {
 	let result = null;
 	users.forEach((item, key) => {
 		result = item.id == id ? item.age: null;
+		result ? cb(null, result) : cb(500, "실패");
 	});
-	result ? cb(null, result) : cb(500, "실패");
-	console.log(result);
 }
 
 findUser("홍길동", (err, result) => {
 	if(err) console.log(err);
 	else {
-		console.log(result);
 		if(result) findAge(result[0].id, (err, result) => {
 			if(err) console.log(err);
 			else {
