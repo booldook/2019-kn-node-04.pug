@@ -47,3 +47,16 @@ app.get(["/api", "/api/:type"], (req, res) => {
       break;
   }
 });
+
+app.get(["/date", "/date/:type"], (req, res) => {
+  let type = req.params.type;
+  if(!type) type = "ts";
+  switch(type) {
+    case "ts":
+      res.send('<h1>'+String(new Date().getTime())+'</h1>');
+      break;
+    default:
+      res.send('<h1>'+String(new Date())+'</h1>');
+      break;
+  }
+})
