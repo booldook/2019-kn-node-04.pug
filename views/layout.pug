@@ -1,0 +1,15 @@
+html(lang="ko")
+	head
+		include ./inc/header.pug
+	body
+		include ./inc/navi.pug
+		if titleChk == "true"
+			block title
+		- var a = 10;
+		- if(titleChk == "true") {
+			div= `타이틀 표시 ${a}`
+		- } else {
+			div= `타이틀 없음 ${a}`
+		- }
+		block content
+		include ./inc/footer.pug
