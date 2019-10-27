@@ -1,0 +1,52 @@
+<script>
+const users = [
+	{id: 1, name: "홍길동", age: 25},
+	{id: 2, name: "홍길순", age: 28},
+	{id: 3, name: "홍길만", age: 32},
+];
+
+const findUser = (name, cb) => {
+	/* var result = users.filter(function(item) {
+		return item.name == name
+	}); */
+	let result = users.filter(item => item.name == name);
+	result.length > 0 ? cb(null, result) : cb(500, "실패"); 
+}
+
+const findAge = (id, cb) => {
+	let result = null;
+	users.forEach((item, key) => {
+		result = item.id == id ? item.age: null;
+	});
+	result ? cb(null, result) : cb(500, "실패");
+	console.log(result);
+}
+
+findUser("홍길동", (err, result) => {
+	if(err) console.log(err);
+	else {
+		console.log(result);
+		if(result) findAge(result[0].id, (err, result) => {
+			if(err) console.log(err);
+			else {
+				console.log(result);
+			}
+		});
+	}
+});
+
+
+
+function firstFn() {
+	secondFn();
+	console.log("First");
+}
+function secondFn() {
+	thirdFn();
+	console.log("Second");
+}
+function thirdFn() {
+	console.log("Third");
+}
+firstFn();
+</script>
