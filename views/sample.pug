@@ -1,8 +1,7 @@
-html
-	head
-		title= title
-		link(rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css")
+html(lang="ko")
+	include ./inc/header.pug
 	body
+		include ./inc/navi.pug
 		div.container
 			h1= `${name} 안녕하세요, PUG`
 			table.table.table-bordered#user-tbl
@@ -23,3 +22,4 @@ html
 							td= users[i].name
 							td= users[i].age
 					- }
+	include ./inc/footer.pug
