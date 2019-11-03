@@ -5,6 +5,20 @@ app.listen(port, ()=> {
   console.log("http://127.0.0.1:"+3000);
 });
 
+// mysql.js
+var mysql = require('mysql');
+var conn = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'test',
+  port     : '3307',
+  password : '000000',
+  database : 'node'
+});
+
+// util module
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({extended: false}));
+
 // 정적 루트 설정
 app.use("/", express.static("./public"));
 
@@ -61,8 +75,36 @@ app.get(["/date", "/date/:type"], (req, res) => {
   }
 });
 
-app.get("/insertIn", insertIn);
+app.get("/insert-in", insertIn);
 function insertIn(req, res) {
   const vals = {tit: "데이터 입력", subTit: "회원가입"};
   res.render("sql/insert", vals);
+}
+
+app.post("/insert/:type", insertFn);
+function insertFn(req, res) {
+  const type = req.params.type;
+  switch(type) {
+    case "save":
+      var username = req.body.username;
+      var age = req.body.age;
+      var wdate = "2019-11-03 11:55:55";
+      var sql = `INSERT INTO users SET username="${username}", age=${age}, wdate="${wdate}"`;
+      conn.connect();
+      conn.query(sql, function (error, results, fields) {
+        if (error) {
+          console.log(error)
+          res.send("Error");
+        }
+        else {
+          console.log('The solution is: ', results[0]);
+          res.json(result[0]);
+        }
+      });
+      conn.end();
+      break;
+    default:
+      res.send("취소");
+      break;
+  }
 }
