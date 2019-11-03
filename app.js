@@ -6,14 +6,22 @@ app.listen(port, ()=> {
 });
 
 // mysql.js
-var mysql = require('mysql');
-var conn = mysql.createConnection({
+const mysql = require('mysql');
+const conn = mysql.createPool({
+  host: "localhost",
+  port: 3307,
+  user: "test",
+  password: "000000",
+  database: "node",
+  connectionLimit: 10
+});
+/* var conn = mysql.createConnection({
   host     : 'localhost',
   user     : 'test',
   port     : '3307',
   password : '000000',
   database : 'node'
-});
+}); */
 
 // util module
 const bodyParser = require("body-parser");
@@ -81,6 +89,7 @@ function insertIn(req, res) {
   res.render("sql/insert", vals);
 }
 
+// 기본적인 mysql 처리 - createConnection()
 app.post("/insert/:type", insertFn);
 function insertFn(req, res) {
   const type = req.params.type;
@@ -89,19 +98,46 @@ function insertFn(req, res) {
       var username = req.body.username;
       var age = req.body.age;
       var wdate = "2019-11-03 11:55:55";
-      var sql = `INSERT INTO users SET username="${username}", age=${age}, wdate="${wdate}"`;
+      //var sql = `INSERT INTO users SET username="${username}", age=${age}, wdate="${wdate}"`;
+      var sql = "INSERT INTO users SET username=?, age=?, wdate=?";
+      var sqlVals = [username, age, wdate];
       conn.connect();
-      conn.query(sql, function (error, results, fields) {
+      conn.query(sql, sqlVals, function (error, results, fields) {
         if (error) {
           console.log(error)
           res.send("Error");
         }
         else {
-          console.log('The solution is: ', results[0]);
-          res.json(result[0]);
+          console.log('The solution is: ', results);
+          if(results.affectedRows == 1) {
+            res.send("잘 저장 되었습니다.");
+          }
+          else {
+            res.send("데이터 저장에 실패하였습니다.");
+          }
         }
       });
       conn.end();
+
+      break;
+    case "save-pool":
+      var username = req.body.username;
+      var age = req.body.age;
+      var wdate = "2019-11-03 11:55:55";
+      var sql = "INSERT INTO users SET username=?, age=?, wdate=?";
+      var sqlVals = [username, age, wdate];
+      conn.getConnection((error, connect) => {
+        if(error) console.log(error);
+        else {
+          connect.query(sql, sqlVals, (error, results, fields) => {
+            if(error) console.log(error);
+            else {
+              res.json(results);
+            }
+            connect.release();
+          });
+        }
+      });
       break;
     default:
       res.send("취소");
