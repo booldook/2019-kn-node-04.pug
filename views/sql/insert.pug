@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+html(lang="ko")
+	include ../inc/header.pug
+	body
+		include ../inc/navi.pug
+		div.container
+			//- mt, mb, ml, mr, mx, my, pt, pb, pl, pr, px, py
+			//- bootstrap: 기본폰트:16px=1rem / -1(0.25rem, 4px), -2(0.5rem, 8px)
+			//- -3(1rem, 16px), -4(1.5rem, 24px), -5(2rem, 32px), -auto(mx-auto => margin: 0 auto)
+			div.jumbotron.mb-3= `${tit} - ${subTit}`
+			form(name="sendForm" action="/insert" method="post" onsubmit="return sendFormFn(this)")
+				table.table.table-bordered.table-hover
+					thead.thead-dark
+						tr
+							th 구분
+							th 내용
+					tbody
+						tr
+							td 이름
+							td
+								input(type="text" name="username" class="form-control")
+						tr
+							td 나이
+							td
+								input(type="number" name="age" class="form-control")
+						tr
+							td(colspan="2")
+								button.btn.btn-primary 저장
+								button.btn.btn-danger(type="reset") 다시작성

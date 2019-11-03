@@ -59,4 +59,10 @@ app.get(["/date", "/date/:type"], (req, res) => {
       res.send('<h1>'+String(new Date())+'</h1>');
       break;
   }
-})
+});
+
+app.get("/insertIn", insertIn);
+function insertIn(req, res) {
+  const vals = {tit: "데이터 입력", subTit: "회원가입"};
+  res.render("sql/insert", vals);
+}
