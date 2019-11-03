@@ -5,14 +5,14 @@ const isoDate = (d, type) => {
 	type: 2 => 19-11-03
 	type: 3 => 2019년 11월 03일
 	*/
-	let type = type? type: 1;
+	let types = type? type: 1;
 	let year = d.getFullYear();
 	let month = zp(d.getMonth() + 1);
 	let day = zp(d.getDate());
 	let hour = zp(d.getHours());
 	let min = zp(d.getMinutes());
 	let sec = zp(d.getSeconds());
-	switch(type) {
+	switch(types) {
 		case 2:
 			return year.substr(2)+"-"+month+"-"+day;
 			break;
@@ -23,4 +23,14 @@ const isoDate = (d, type) => {
 			return year+"-"+month+"-"+day+" "+hour+":"+min+":"+sec;
 	}
 }
-module.exports = {zp, isoDate};
+
+const js2Iso = (obj, field) => {
+	const reData = obj.map((item) => {
+		item[field] = isoDate(item[field]);
+		return item;
+	});
+	return reData;
+}
+
+
+module.exports = {zp, isoDate, js2Iso};

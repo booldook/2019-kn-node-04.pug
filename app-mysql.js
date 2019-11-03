@@ -18,6 +18,7 @@ const sqlExec = db.sqlExec;
 */
 const {mysql, conn, sqlExec} = require("./modules/mysql-conn");
 const {alertLoc} = require("./modules/util-loc");
+const {zp, isoDate, js2Iso} = require("./modules/util-date");
 
 // 정적 루트 설정
 app.use("/", express.static("./public"));
@@ -45,8 +46,12 @@ function userGet(req, res) {
 		case "li":
 			(async () => {
 				let sql = "SELECT * FROM users ORDER BY id DESC";
-				const result = await sqlExec(sql);
-				const vals = {tit: "데이터 출력", subTit: "회원리스트", datas: result[0]};
+				let result = await sqlExec(sql);
+				const vals = {
+					tit: "데이터 출력", 
+					subTit: "회원리스트", 
+					datas: js2Iso(result[0], "wdate")
+				};
 				res.render("sql/list", vals);
 			})();
 			break;
@@ -64,7 +69,7 @@ function userPost(req, res) {
 			const age = req.body.age;
 			(async () => {
 				let sql = "INSERT INTO users SET username=?, age=?, wdate=?";
-				let sqlVals = [username, age, "2019-11-03 14:30:30"];
+				let sqlVals = [username, age, isoDate(new Date())];
 				let result = await sqlExec(sql, sqlVals);
 				res.send(alertLoc("저장되었습니다.", "/user/li"));
 			})();
