@@ -17,6 +17,7 @@ const conn = db.conn;
 const sqlExec = db.sqlExec;
 */
 const {mysql, conn, sqlExec} = require("./modules/mysql-conn");
+const {alertLoc} = require("./modules/util-loc");
 
 // 정적 루트 설정
 app.use("/", express.static("./public"));
@@ -27,14 +28,14 @@ app.set("views", "./views");
 app.locals.pretty = true;
 
 // Router - GET
-app.get("/insert/:type", insertGet);
+app.get("/user/:type", userGet); // wr, li
 
 // Router - POST
-app.post("/insert/:type", insertPost);
+app.post("/user/:type", userPost);
 
 
 // Router CB - GET
-function insertGet(req, res) {
+function userGet(req, res) {
 	const type = req.params.type;
 	switch(type) {
 		case "wr":
@@ -42,6 +43,12 @@ function insertGet(req, res) {
 			res.render("sql/insert", vals);
 			break;
 		case "li":
+			(async () => {
+				let sql = "SELECT * FROM users ORDER BY id DESC";
+				const result = await sqlExec(sql);
+				const vals = {tit: "데이터 출력", subTit: "회원리스트", datas: result[0]};
+				res.render("sql/list", vals);
+			})();
 			break;
 		default:
 			break;
@@ -49,6 +56,20 @@ function insertGet(req, res) {
 }
 
 // Router CB - POST
-function insertPost(req, res) {
-	
+function userPost(req, res) {
+	const type = req.params.type;
+	switch(type) {
+		case "save":
+			const username = req.body.username;
+			const age = req.body.age;
+			(async () => {
+				let sql = "INSERT INTO users SET username=?, age=?, wdate=?";
+				let sqlVals = [username, age, "2019-11-03 14:30:30"];
+				let result = await sqlExec(sql, sqlVals);
+				res.send(alertLoc("저장되었습니다.", "/user/li"));
+			})();
+			break;
+		default:
+			break;
+	}
 }
