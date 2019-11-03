@@ -14,7 +14,7 @@ const isoDate = (d, type) => {
 	let sec = zp(d.getSeconds());
 	switch(types) {
 		case 2:
-			return year.substr(2)+"-"+month+"-"+day;
+			return String(year).substr(2)+"-"+month+"-"+day;
 			break;
 		case 3:
 			return year+"년 "+month+"월 "+day+"일";

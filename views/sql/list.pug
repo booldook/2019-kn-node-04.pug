@@ -15,6 +15,7 @@ html(lang="ko")
 						th 이름
 						th 나이
 						th 가입일
+						th 관리
 				tbody
 					each item in datas
 						tr
@@ -22,5 +23,7 @@ html(lang="ko")
 							td= item["username"]
 							td= item["age"]
 							td= item["wdate"]
+							td
+								button.btn.btn-danger.btn-sm(onclick=`location.href='/user/rm/${item["id"]}';`) 삭제
 
 					

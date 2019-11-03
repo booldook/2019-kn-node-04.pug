@@ -29,7 +29,7 @@ app.set("views", "./views");
 app.locals.pretty = true;
 
 // Router - GET
-app.get("/user/:type", userGet); // wr, li
+app.get(["/user/:type", "/user/:type/:id"], userGet); // wr, li
 
 // Router - POST
 app.post("/user/:type", userPost);
@@ -38,6 +38,7 @@ app.post("/user/:type", userPost);
 // Router CB - GET
 function userGet(req, res) {
 	const type = req.params.type;
+	const id = req.params.id;
 	switch(type) {
 		case "wr":
 			const vals = {tit: "데이터 입력", subTit: "회원가입"};
@@ -53,6 +54,14 @@ function userGet(req, res) {
 					datas: js2Iso(result[0], "wdate")
 				};
 				res.render("sql/list", vals);
+			})();
+			break;
+		case "rm":
+			(async () => {
+				const sql = "DELETE FROM users WHERE id="+id;
+				const result = await sqlExec(sql);
+				if(result[0].affectedRows == 1) res.send(alertLoc("삭제되었습니다.", "/user/li"));
+				else res.send(alertLoc("삭제가 완료되지 않았습니다. 관리자에게 문의하세요.", "/user/li"));
 			})();
 			break;
 		default:
