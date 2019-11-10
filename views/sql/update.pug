@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+html(lang="ko")
+	include ../inc/header.pug
+	body
+		include ../inc/navi.pug
+		div.container
+			div.jumbotron.my-3
+				h1= tit
+					span= " - "
+					small= subTit
+			form(name="sendForm" action="/user/update" method="post")
+				table.table.table-bordered.table-hover
+					thead.thead-dark
+						tr
+							th 구분
+							th 내용
+					tbody
+						tr
+							td 이름
+							td
+								input(type="hidden" name="id" value=`${datas.id}`)
+								input(type="text" name="username" class="form-control" value=`${datas.username}`)
+						tr
+							td 나이
+							td
+								input(type="number" name="age" class="form-control" value=`${datas.age}`)
+						tr
+							td(colspan="2")
+								button.btn.btn-primary 저장
+								button.btn.btn-danger(type="reset") 다시작성

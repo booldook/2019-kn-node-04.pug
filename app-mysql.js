@@ -60,10 +60,22 @@ function userGet(req, res) {
 			(async () => {
 				const sql = "DELETE FROM users WHERE id="+id;
 				const result = await sqlExec(sql);
-				if(result[0].affectedRows == 1) res.send(alertLoc("삭제되었습니다.", "/user/li"));
+				if(result[0].affectedRows > 0) res.send(alertLoc("삭제되었습니다.", "/user/li"));
 				else res.send(alertLoc("삭제가 완료되지 않았습니다. 관리자에게 문의하세요.", "/user/li"));
 			})();
 			break;
+		case "up":
+			(async ()=>{
+				let sql = "SELECT * FROM users WHERE id=?";
+				let sqlVals = [req.params.id];
+				let result = await sqlExec(sql, sqlVals);
+				let vals = {
+					tit: "데이터 수정",
+					subTit: "회원 수정",
+					datas: result[0][0]
+				}
+				res.render("sql/update", vals);
+			})();
 		default:
 			break;
 	}
@@ -71,16 +83,29 @@ function userGet(req, res) {
 
 // Router CB - POST
 function userPost(req, res) {
-	const type = req.params.type;
+	let type = req.params.type;
+	let username = req.body.username;
+	let age = req.body.age;
+	let id = req.body.id;
+	let sql = '';
+	let sqlVals = [];
+	let result = null;
 	switch(type) {
 		case "save":
-			const username = req.body.username;
-			const age = req.body.age;
 			(async () => {
-				let sql = "INSERT INTO users SET username=?, age=?, wdate=?";
-				let sqlVals = [username, age, isoDate(new Date())];
-				let result = await sqlExec(sql, sqlVals);
+				sql = "INSERT INTO users SET username=?, age=?, wdate=?";
+				sqlVals = [username, age, isoDate(new Date())];
+				result = await sqlExec(sql, sqlVals);
 				res.send(alertLoc("저장되었습니다.", "/user/li"));
+			})();
+			break;
+		case "update":
+			(async () => {
+				sql = "UPDATE users SET username=?, age=? WHERE id=?";
+				sqlVals = [username, age, id];
+				result = await sqlExec(sql, sqlVals);
+				if(result[0].affectedRows > 0) res.send(alertLoc("수정되었습니다.", "/user/li"));
+				else res.send(alertLoc("수정에 실패하였습니다.", "/user/li"));
 			})();
 			break;
 		default:

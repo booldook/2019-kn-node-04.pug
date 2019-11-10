@@ -21,3 +21,8 @@ DELETE FROM users WHERE id>2000;	/* id > 2000 삭제*/
 DELETE FROM users WHERE id>2000 AND username like '%길동%';
 DELETE FROM users WHERE username='홍길동';
 ~~~
+## 4. 데이터 수정하기
+~~~sql
+UPDATE 테이블명 SET 필드명='값', 필드명2='값2' WHERE 필드명=값;
+UPDATE users SET username='홍길동', age=25 WHERE id=3;
+~~~
